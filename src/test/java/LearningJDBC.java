@@ -24,6 +24,14 @@ public class LearningJDBC {
         }
     }
 
+    @Test
+    public void simpleSelectTestAbsolute() throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select task_id from ts_tasks;");
+        resultSet.absolute(4);
+        System.out.println(resultSet.getString("task_id"));
+    }
+
     @AfterClass
     public  void cleanUp() throws SQLException {
         connection.close();
