@@ -85,6 +85,18 @@ public class LearningJDBC {
         }
     }
 
+    @Test
+    public void insertQueryUsingPreparedTest() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("insert into ts_tasks (title, priority, status) values(?,?,?)");
+        for (int i = 0; i < 3; i++) {
+            statement.setString(1, "title " + i);
+            statement.setByte(2, (byte) i);
+            statement.setByte(3, (byte) i);
+            statement.executeUpdate();
+        }
+
+    }
+
     @AfterClass
     public void cleanUp() throws SQLException {
         connection.close();
