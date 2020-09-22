@@ -51,5 +51,13 @@ public class Tasks {
     @Test
     public void task3() throws SQLException {
         // get me the number of tasks for each status using executeQuery
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select count(task_id) , status from ts_tasks group by status;");
+        System.out.println("Count of Task , Status");
+        while (resultSet.next()) {
+            System.out.print(resultSet.getString(1)+" , ");
+            System.out.print(resultSet.getString(2));
+            System.out.println();
+        }
     }
 }
