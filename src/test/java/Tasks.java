@@ -47,4 +47,9 @@ public class Tasks {
             System.out.println();
         }
     }
+
+    @Test
+    public void task3() throws SQLException {
+        // get me the number of tasks for each status using executeQuery
+    }
 }
