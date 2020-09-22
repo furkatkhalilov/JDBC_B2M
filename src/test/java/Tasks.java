@@ -36,5 +36,15 @@ public class Tasks {
     @Test
     public void task2() throws SQLException {
         // print out task id, title and status from ts_tasks where status is 1 using prepared statement
+        PreparedStatement statement = connection.prepareStatement("select task_id , title, status from ts_tasks WHERE status = ?;");
+        statement.setInt(1, 1);
+        ResultSet resultSet = statement.executeQuery();
+        System.out.println("task_id , title , status ");
+        while (resultSet.next()) {
+            System.out.print(resultSet.getString(1)+"   ,   ");
+            System.out.print(resultSet.getString(2)+"   ,   ");
+            System.out.print(resultSet.getString(3));
+            System.out.println();
+        }
     }
 }
