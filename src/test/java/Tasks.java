@@ -60,4 +60,11 @@ public class Tasks {
             System.out.println();
         }
     }
+
+    @Test
+    public void task4() throws SQLException {
+        // update titles to "tasks with startdate" and start_date to current date, where status is 0 using prepared statement
+    }
+
+
 }
