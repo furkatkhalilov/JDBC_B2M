@@ -105,6 +105,22 @@ public class LearningJDBC {
         statement.executeUpdate();
     }
 
+    @Test
+    public void selectQueryUsingPreparedTest() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("select * from ts_tasks WHERE priority = ?;");
+        statement.setInt(1, 1);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            System.out.print(resultSet.getString(1) + ",");
+            System.out.print(resultSet.getString(2)+ ",");
+            System.out.print(resultSet.getString(3)+ ",");
+            System.out.print(resultSet.getString(4)+ ",");
+            System.out.println();
+        }
+    }
+
+
+
     @AfterClass
     public void cleanUp() throws SQLException {
         connection.close();
