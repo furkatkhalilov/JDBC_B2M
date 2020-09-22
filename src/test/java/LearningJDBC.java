@@ -29,7 +29,7 @@ public class LearningJDBC {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("select task_id from ts_tasks;");
         resultSet.absolute(4);
-        System.out.println(resultSet.getString("task_id"));
+        System.out.println(resultSet.getInt("task_id"));
     }
 
     @AfterClass
