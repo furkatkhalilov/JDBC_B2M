@@ -45,6 +45,19 @@ public class LearningJDBC {
         System.out.println(resultSet.getObject("start_date"));
     }
 
+    // 2) using wrapper classes, because they can represent null
+    @Test
+    public void simpleSelectGettingNullValueAsWrappers() throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select start_date from ts_tasks;");
+        resultSet.absolute(4);
+        Integer integer = resultSet.getInt("start_date");
+        if(resultSet.wasNull()) { // if the value was null
+            integer = null; // set the wrapper to null
+        }
+        System.out.println(integer);
+    }
+
     @AfterClass
     public  void cleanUp() throws SQLException {
         connection.close();
