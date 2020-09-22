@@ -1,3 +1,4 @@
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -19,7 +20,12 @@ public class LearningJDBC {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("select task_id from ts_tasks;");
         while (resultSet.next()) {
-            System.out.println(resultSet.getString(1));
+            System.out.println(resultSet.getString("task_id"));
         }
+    }
+
+    @AfterClass
+    public  void cleanUp() throws SQLException {
+        connection.close();
     }
 }
