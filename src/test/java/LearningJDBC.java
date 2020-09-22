@@ -52,7 +52,7 @@ public class LearningJDBC {
         ResultSet resultSet = statement.executeQuery("select start_date from ts_tasks;");
         resultSet.absolute(4);
         Integer integer = resultSet.getInt("start_date");
-        if(resultSet.wasNull()) { // if the value was null
+        if (resultSet.wasNull()) { // if the value was null
             integer = null; // set the wrapper to null
         }
         System.out.println(integer);
@@ -64,9 +64,29 @@ public class LearningJDBC {
         int updateRows = statement.executeUpdate("UPDATE ts_tasks SET title = 'Status 1 title' WHERE status = 5;");
         System.out.println(updateRows);
     }
-    
+
+    @Test
+    public void updateQueryUsingExecuteTest() throws SQLException {
+        Statement statement = connection.createStatement();
+        boolean hasResultSet = statement.execute("UPDATE ts_tasks SET title = 'Status 1 title' WHERE status = 5;");
+        System.out.println(hasResultSet);
+    }
+
+    @Test
+    public void selectQueryUsingExecuteTest() throws SQLException {
+        Statement statement = connection.createStatement();
+        boolean hasResultSet = statement.execute("select task_id from ts_tasks;");
+        System.out.println(hasResultSet);
+        if (hasResultSet) {
+            ResultSet resultSet = statement.getResultSet();
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString(1));
+            }
+        }
+    }
+
     @AfterClass
-    public  void cleanUp() throws SQLException {
+    public void cleanUp() throws SQLException {
         connection.close();
     }
 }
