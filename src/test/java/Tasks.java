@@ -65,7 +65,7 @@ public class Tasks {
     public void task4() throws SQLException {
         // update titles to "tasks with startdate" and start_date to current date, where status is 0 using prepared statement
         PreparedStatement statement = connection.prepareStatement("UPDATE ts_tasks SET title = ?, start_date = ? WHERE status = ?;");
-        Date date = new Date(System.currentTimeMillis());
+        Date date = new Date(System.currentTimeMillis()); // java Date and sql Date are two different classes
 
         statement.setString(1, "tasks with startdate");
         statement.setDate(2, date);

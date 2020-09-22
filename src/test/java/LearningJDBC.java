@@ -3,6 +3,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.sql.*;
+import java.util.Date;
 
 public class LearningJDBC {
     Connection connection;
@@ -103,6 +104,7 @@ public class LearningJDBC {
         statement.setString(1, "xxxxxxxxxxxx");
         statement.setByte(2, (byte) 0);
         statement.executeUpdate();
+        Date date = new Date();
     }
 
     @Test
