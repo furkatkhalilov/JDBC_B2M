@@ -97,6 +97,14 @@ public class LearningJDBC {
 
     }
 
+    @Test
+    public void updateQueryUsingPreparedTest() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("UPDATE ts_tasks SET title = ? WHERE status = ?;");
+        statement.setString(1, "xxxxxxxxxxxx");
+        statement.setByte(2, (byte) 0);
+        statement.executeUpdate();
+    }
+
     @AfterClass
     public void cleanUp() throws SQLException {
         connection.close();
