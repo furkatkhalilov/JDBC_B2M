@@ -58,6 +58,13 @@ public class LearningJDBC {
         System.out.println(integer);
     }
 
+    @Test
+    public void updateQueryTest() throws SQLException {
+        Statement statement = connection.createStatement();
+        int updateRows = statement.executeUpdate("UPDATE ts_tasks SET title = 'Status 1 title' WHERE status = 5;");
+        System.out.println(updateRows);
+    }
+    
     @AfterClass
     public  void cleanUp() throws SQLException {
         connection.close();
