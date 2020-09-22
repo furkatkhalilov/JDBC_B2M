@@ -32,4 +32,9 @@ public class Tasks {
             System.out.println();
         }
     }
+
+    @Test
+    public void task2() throws SQLException {
+        // print out task id, title and priority from ts_tasks table using executeQuery
+    }
 }
