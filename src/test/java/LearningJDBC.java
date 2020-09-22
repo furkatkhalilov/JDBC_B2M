@@ -32,6 +32,19 @@ public class LearningJDBC {
         System.out.println(resultSet.getInt("task_id"));
     }
 
+    // handling null values in sql
+    // 1) avoid using primitive data types, because they cannot represent null
+    @Test
+    public void simpleSelectGettingNullValueAsPrimitive() throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select start_date from ts_tasks;");
+        resultSet.absolute(4);
+        int integer = resultSet.getInt("start_date");
+        System.out.println(integer); // this should print null, but it is printing zero
+        // so instead use Object or any other type other than primitive
+        System.out.println(resultSet.getObject("start_date"));
+    }
+
     @AfterClass
     public  void cleanUp() throws SQLException {
         connection.close();
