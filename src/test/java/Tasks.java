@@ -2,9 +2,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Tasks {
     Connection connection;
@@ -23,7 +21,15 @@ public class Tasks {
     }
 
     @Test
-    public void task1() {
+    public void task1() throws SQLException {
         // print out task id, title and priority from ts_tasks table using executeQuery
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select task_id , title, priority from ts_tasks;");
+        while (resultSet.next()) {
+            System.out.print(resultSet.getString(1)+" , ");
+            System.out.print(resultSet.getString(2)+" , ");
+            System.out.print(resultSet.getString(3)+" , ");
+            System.out.println();
+        }
     }
 }
