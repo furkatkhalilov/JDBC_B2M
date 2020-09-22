@@ -35,6 +35,6 @@ public class Tasks {
 
     @Test
     public void task2() throws SQLException {
-        // print out task id, title and priority from ts_tasks table using executeQuery
+        // print out task id, title and status from ts_tasks where status is 1 using prepared statement
     }
 }
