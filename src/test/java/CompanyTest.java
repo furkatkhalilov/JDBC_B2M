@@ -3,6 +3,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class CompanyTest {
             System.out.println();
         }
     }
+
     // Task2: create a test that tests that Egypt is in region 4+
     // solution 1
     @Test
@@ -39,18 +41,19 @@ public class CompanyTest {
         ResultSet resultSet = statement.executeQuery("select * from countries;"); // selecting all the countries, not optimized
         while (resultSet.next()) {
             // if there's no Egypt this test will never fail, but it should
-            if(resultSet.getString("COUNTRY_NAME") =="Egypt"){
-                Assert.assertEquals(resultSet.getString("REGION_ID"),4);
+            if (resultSet.getString("COUNTRY_NAME") == "Egypt") {
+                Assert.assertEquals(resultSet.getString("REGION_ID"), 4);
             }
         }
     }
+
     // solution 2
     @Test
     public void simpleSelectGettingNullValuesAsWrappers() throws SQLException {
-        ResultSet resultSet = statement.executeQuery( "SELECT * FROM company.countries where COUNTRY_NAME = 'Egypt';" );
-        resultSet.absolute( 1 );
-        int region_id = resultSet.getInt( "REGION_ID" );
-        Assert.assertEquals( region_id,4 );
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM company.countries where COUNTRY_NAME = 'Egypt';");
+        resultSet.absolute(1);
+        int region_id = resultSet.getInt("REGION_ID");
+        Assert.assertEquals(region_id, 4);
     }
 
     //Task3: create a test that tests that Singapore is in Asia
@@ -69,7 +72,7 @@ public class CompanyTest {
     */
     @Test(dataProvider = "testCountries")
     public void Task4(int regionId, int numberOfCountries) throws SQLException {
-        ResultSet rs = statement.executeQuery("select count(country_name) as total from company.countries where region_id = "+ regionId +";");
+        ResultSet rs = statement.executeQuery("select count(country_name) as total from company.countries where region_id = " + regionId + ";");
         rs.first();
         int totalNumberOfCountries = rs.getInt("total");
         Assert.assertEquals(totalNumberOfCountries, numberOfCountries);
@@ -77,38 +80,48 @@ public class CompanyTest {
 
     @DataProvider(name = "testCountries")
     public Object[][] testCountriesData() {
-        Object[][] data = {{1,8}, {2,5}, {3,6}, {4,6}}; // {regionId, expectedCountriesCount }
+        Object[][] data = {{1, 8}, {2, 5}, {3, 6}, {4, 6}}; // {regionId, expectedCountriesCount }
         return data;
     }
 
     @Test(dataProvider = "countryDataProvider")
     public void Task4Alternative(int regionId, int numberOfCountries) throws SQLException {
         Map<Integer, Integer> countryMap = new HashMap<>();
-        countryMap.put(1,8);
-        countryMap.put(2,5);
-        countryMap.put(3,6);
-        countryMap.put(4,6);
+        countryMap.put(1, 8);
+        countryMap.put(2, 5);
+        countryMap.put(3, 6);
+        countryMap.put(4, 6);
         Assert.assertEquals(countryMap.get(regionId).intValue(), numberOfCountries);
     }
 
     @DataProvider(name = "countryDataProvider")
     public Object[][] data() throws SQLException {
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery( "SELECT REGION_ID, count(*) AS count FROM countries group by REGION_ID;");
+        ResultSet resultSet = statement.executeQuery("SELECT REGION_ID, count(*) AS count FROM countries group by REGION_ID;");
         resultSet.last(); // point the cursor to the last row
         int numberOfRows = resultSet.getRow(); // get the number of rows
         resultSet.beforeFirst(); // point the cursor back to the beginning
         Object[][] object = new Object[numberOfRows][2];
         while (resultSet.next()) {
             for (int i = 0; i < numberOfRows; i++) {
-                object[i][0]= resultSet.getString("REGION_ID");
-                object[i][1]= resultSet.getString("COUNT");
+                object[i][0] = resultSet.getString("REGION_ID");
+                object[i][1] = resultSet.getString("COUNT");
             }
         }
         return object;
     }
 
     // Task5: create a test that checks that every employee gets salary within range of their jobs min and max salary
+    @Test
+    public void Task5() throws SQLException {
+        SoftAssert softAssert = new SoftAssert();
+        ResultSet rs = statement.executeQuery("select salary, MIN_SALARY, MAX_SALARY, concat(FIRST_NAME, ' ', LAST_NAME) from employees join jobs on employees.JOB_ID=jobs.JOB_ID;");
+        while (rs.next()) {
+            softAssert.assertTrue(rs.getInt(1) >= rs.getInt(2), "The salary for "+rs.getString(4)+" must be more than minimum salary");
+            softAssert.assertTrue(rs.getInt(1) <= rs.getInt(3), "The salary for "+rs.getString(4)+" must be less than maximum salary");
+        }
+        softAssert.assertAll();
+    }
 
     @AfterClass
     public void cleanUp() throws SQLException {
