@@ -6,7 +6,9 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -117,10 +119,22 @@ public class CompanyTest {
         SoftAssert softAssert = new SoftAssert();
         ResultSet rs = statement.executeQuery("select salary, MIN_SALARY, MAX_SALARY, concat(FIRST_NAME, ' ', LAST_NAME) from employees join jobs on employees.JOB_ID=jobs.JOB_ID;");
         while (rs.next()) {
-            softAssert.assertTrue(rs.getInt(1) >= rs.getInt(2), "The salary for "+rs.getString(4)+" must be more than minimum salary");
-            softAssert.assertTrue(rs.getInt(1) <= rs.getInt(3), "The salary for "+rs.getString(4)+" must be less than maximum salary");
+            softAssert.assertTrue(rs.getInt(1) >= rs.getInt(2), "The salary for " + rs.getString(4) + " must be more than minimum salary");
+            softAssert.assertTrue(rs.getInt(1) <= rs.getInt(3), "The salary for " + rs.getString(4) + " must be less than maximum salary");
         }
         softAssert.assertAll();
+    }
+
+    @Test
+    public void checkSalary() throws SQLException {
+        ResultSet resultSet = statement.executeQuery("SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY, MIN_SALARY, MAX_SALARY FROM employees JOIN jobs using(JOB_ID) WHERE (SALARY>MAX_SALARY OR SALARY<MIN_SALARY);;");
+        List<String> employeesWithWrongSalary = new ArrayList<>();
+        while (resultSet.next()) {
+            String result = resultSet.getString("EMPLOYEE_ID") + ": " + resultSet.getString("FIRST_NAME") + " " + resultSet.getString("LAST_NAME");
+            System.out.println(result);
+            employeesWithWrongSalary.add(result);
+        }
+        Assert.assertEquals(employeesWithWrongSalary.size(), 0);
     }
 
     @AfterClass
