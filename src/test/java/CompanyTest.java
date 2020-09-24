@@ -21,7 +21,7 @@ public class CompanyTest {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("select * from countries;");
         while (resultSet.next()) {
-            System.out.println(resultSet.getString(1));
+            System.out.println(resultSet.getString("COUNTRY_NAME"));
         }
     }
 
