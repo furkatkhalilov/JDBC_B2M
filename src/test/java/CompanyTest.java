@@ -21,7 +21,6 @@ public class CompanyTest {
 
     @Test
     public void printAllCountries() throws SQLException {
-        Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("select * from countries;");
         while (resultSet.next()) {
             System.out.print(resultSet.getString("COUNTRY_ID") + "\t");
@@ -56,7 +55,6 @@ public class CompanyTest {
         ResultSet rs = statement.executeQuery("SELECT * FROM countries join regions ON countries.REGION_ID=regions.REGION_ID where COUNTRY_NAME like 'Singapore';");
         rs.first();
         Assert.assertEquals(rs.getString("REGION_NAME").trim(), "Asia");
-
     }
 
     @AfterClass
