@@ -1,6 +1,7 @@
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.sql.*;
@@ -55,6 +56,20 @@ public class CompanyTest {
         ResultSet rs = statement.executeQuery("SELECT * FROM countries join regions ON countries.REGION_ID=regions.REGION_ID where COUNTRY_NAME like 'Singapore';");
         rs.first();
         Assert.assertEquals(rs.getString("REGION_NAME").trim(), "Asia");
+    }
+
+    @Test(dataProvider = "testCountries")
+    public void Task4(int regionId, int numberOfCountries) throws SQLException {
+        ResultSet rs = statement.executeQuery("select count(country_name) as total from company.countries where region_id = "+ regionId +";");
+        rs.first();
+        int totalNumberOfCountries = rs.getInt("total");
+        Assert.assertEquals(totalNumberOfCountries, numberOfCountries);
+    }
+
+    @DataProvider(name = "testCountries")
+    public Object[][] testCountriesData() {
+        Object[][] data = {{1,8}, {2,5}, {3,6}, {4,6}}; // {regionId, expectedCountriesCount }
+        return data;
     }
 
     @AfterClass
