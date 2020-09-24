@@ -53,6 +53,7 @@ public class CompanyTest {
         Assert.assertEquals( region_id,4 );
     }
 
+    //Task3: create a test that tests that Singapore is in Asia
     @Test
     public void Task3() throws SQLException {
         ResultSet rs = statement.executeQuery("SELECT * FROM countries join regions ON countries.REGION_ID=regions.REGION_ID where COUNTRY_NAME like 'Singapore';");
@@ -60,6 +61,12 @@ public class CompanyTest {
         Assert.assertEquals(rs.getString("REGION_NAME").trim(), "Asia");
     }
 
+    /*  Task4: create a test that checks that : (hint: use dataprovider)
+	- region 1 has 8 countries
+	- region 2 has 5 countries
+	- region 3 has 6 countries
+	- region 4 has 6 countries
+    */
     @Test(dataProvider = "testCountries")
     public void Task4(int regionId, int numberOfCountries) throws SQLException {
         ResultSet rs = statement.executeQuery("select count(country_name) as total from company.countries where region_id = "+ regionId +";");
@@ -100,6 +107,8 @@ public class CompanyTest {
         }
         return object;
     }
+
+    // Task5: create a test that checks that every employee gets salary within range of their jobs min and max salary
 
     @AfterClass
     public void cleanUp() throws SQLException {
