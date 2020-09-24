@@ -8,6 +8,7 @@ import java.sql.*;
 
 public class CompanyTest {
     Connection connection;
+    private Statement statement;
 
     @BeforeClass
     public void init() throws SQLException {
@@ -15,6 +16,7 @@ public class CompanyTest {
         String username = "technostudy";
         String password = "zhTPis0l9#$&";
         connection = DriverManager.getConnection(url, username, password);
+        statement = connection.createStatement();
     }
 
     @Test
@@ -32,7 +34,6 @@ public class CompanyTest {
     // solution 1
     @Test
     public void egyptInRegion4() throws SQLException {
-        Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("select * from countries;"); // selecting all the countries, not optimized
         while (resultSet.next()) {
             // if there's no Egypt this test will never fail, but it should
@@ -44,11 +45,18 @@ public class CompanyTest {
     // solution 2
     @Test
     public void simpleSelectGettingNullValuesAsWrappers() throws SQLException {
-        Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery( "SELECT * FROM company.countries where COUNTRY_NAME = 'Egypt';" );
         resultSet.absolute( 1 );
         int region_id = resultSet.getInt( "REGION_ID" );
         Assert.assertEquals( region_id,4 );
+    }
+
+    @Test
+    public void Task3() throws SQLException {
+        ResultSet rs = statement.executeQuery("SELECT * FROM countries join regions ON countries.REGION_ID=regions.REGION_ID where COUNTRY_NAME like 'Singapore';");
+        rs.first();
+        Assert.assertEquals(rs.getString("REGION_NAME").trim(), "Asia");
+
     }
 
     @AfterClass
